@@ -1,0 +1,7 @@
+{% if messages %}
+<div class="rfc-flash-wrap">
+  {% for message in messages %}
+  <div class="rfc-flash {{ message.tags }}">{{ message }}</div>
+  {% endfor %}
+</div>
+{% endif %}

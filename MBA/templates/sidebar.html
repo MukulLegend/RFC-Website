@@ -1,0 +1,164 @@
+<div>
+  <button id="sidebarToggle" class="sidebar-toggle" aria-label="Toggle sidebar">
+    <span class="bar"></span>
+    <span class="bar"></span>
+    <span class="bar"></span>
+  </button>
+</div>
+
+<div class="sidebar inactive" id="sidebar">
+  <ul class="nav flex-column"><br><br>
+    <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'squad' %}">Squad</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'matches' %}">Matches</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'news' %}">News</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'contact' %}">Contact</a></li>
+    {% if user.is_authenticated %}
+    <li class="nav-item"><a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'chat' %}">Chat with AI</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
+    {% else %}
+    <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Register</a></li>
+    {% endif %}
+  </ul>
+</div>
+
+<style>
+.sidebar-toggle {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 22px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 1050;
+}
+
+.sidebar-toggle .bar {
+  height: 4px;
+  width: 100%;
+  background-color: #ffffff;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.sidebar {
+  height: 100vh;
+  width: 200px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #343a40;
+  padding-top: 20px;
+  transition: transform 0.3s ease;
+  transform: translateX(0);
+  z-index: 1040;
+}
+
+.sidebar.active {
+  transform: translateX(0);
+}
+
+.sidebar.inactive {
+  transform: translateX(-100%);
+}
+
+.sidebar .nav-link {
+  color: #fff;
+  padding: 10px 15px;
+  display: block;
+}
+
+.sidebar .nav-link:hover {
+  background-color: #495057;
+  color: #fff;
+}
+
+/* New styles for full page content and overlay sidebar */
+body, html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+.navbar, .main-content {
+  width: 100%;
+  transition: margin-left 0.3s ease;
+  position: relative;
+  z-index: 1;
+}
+
+/* When sidebar is active, content remains full width but sidebar overlays */
+.sidebar.active ~ .navbar,
+.sidebar.active ~ .main-content {
+  margin-left: 0;
+}
+
+/* Optional: add overlay background when sidebar active */
+.sidebar.active::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 200px;
+  width: calc(100% - 200px);
+  height: 100%;
+  background: rgba(235, 235, 235, 0.3);
+  z-index: 1030;
+  pointer-events: none;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const sidebarToggle = document.getElementById('sidebarToggle');
+  const sidebar = document.getElementById('sidebar');
+
+  sidebarToggle.addEventListener('click', function() {
+    if (sidebar.classList.contains('active')) {
+      sidebar.classList.remove('active');
+      sidebar.classList.add('inactive');
+    } else {
+      sidebar.classList.remove('inactive');
+      sidebar.classList.add('active');
+    }
+  });
+});
+</script>
+
+{% if user.is_authenticated %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    console.log("Floating icons script running");
+    // Create floating icons container
+    const floatingIcons = document.createElement('div');
+    floatingIcons.className = 'floating-icons';
+
+    // WhatsApp icon
+    const whatsappLink = document.createElement('a');
+    whatsappLink.href = 'https://wa.me/919780603105';
+    whatsappLink.target = '_blank';
+    whatsappLink.className = 'floating-icon whatsapp-icon';
+    whatsappLink.setAttribute('aria-label', 'WhatsApp Chat');
+    floatingIcons.appendChild(whatsappLink);
+
+    // Chat with AI icon
+    const chatLink = document.createElement('a');
+    chatLink.href = '/chat/';
+    chatLink.className = 'floating-icon chat-icon';
+    chatLink.setAttribute('aria-label', 'Chat with AI');
+    floatingIcons.appendChild(chatLink);
+
+    // Append to body
+    document.body.appendChild(floatingIcons);
+});
+</script>
+{% endif %}

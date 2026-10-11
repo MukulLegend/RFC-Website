@@ -1,0 +1,19 @@
+{% with current=request.resolver_match.url_name %}
+<nav>
+  <ul>
+    <li><a href="{% url 'home' %}" {% if current == 'home' %}aria-current="page"{% endif %}>Home</a></li>
+    <li><a href="{% url 'about' %}" {% if current == 'about' %}aria-current="page"{% endif %}>About</a></li>
+    <li><a href="{% url 'squad' %}" {% if current == 'squad' %}aria-current="page"{% endif %}>Squad</a></li>
+    <li><a href="{% url 'matches' %}" {% if current == 'matches' %}aria-current="page"{% endif %}>Matches</a></li>
+    <li><a href="{% url 'news' %}" {% if current == 'news' %}aria-current="page"{% endif %}>News</a></li>
+    <li><a href="{% url 'contact' %}" {% if current == 'contact' %}aria-current="page"{% endif %}>Contact</a></li>
+    {% if user.is_authenticated %}
+    <li><a href="{% url 'dashboard' %}" {% if current == 'dashboard' %}aria-current="page"{% endif %}>Dashboard</a></li>
+    <li><a href="{% url 'logout' %}">Logout</a></li>
+    {% else %}
+    <li><a href="{% url 'login' %}" {% if current == 'login' %}aria-current="page"{% endif %}>Login</a></li>
+    <li><a href="{% url 'register' %}" {% if current == 'register' %}aria-current="page"{% endif %}>Register</a></li>
+    {% endif %}
+  </ul>
+</nav>
+{% endwith %}

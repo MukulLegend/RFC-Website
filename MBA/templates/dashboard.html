@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <style>
+        .dashboard-container {
+            width: 800px;
+            margin: 3rem auto;
+            padding: 3rem;
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            transition: box-shadow 0.3s ease;
+        }
+        .dashboard-container:hover {
+            box-shadow: 0 12px 36px rgba(0, 0, 0, 0.25);
+            width: 800px;
+        }
+        .dashboard-container h1 {
+            color: #0d1722;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+        .dashboard-container h2 {
+            color: #20c997;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            border-bottom: 2px solid #20c997;
+            padding-bottom: 0.5rem;
+        }
+        .profile-list {
+            list-style-type: none;
+            padding: 0;
+            font-size: 1.2rem;
+        }
+        .profile-list li {
+            margin-bottom: 1rem;
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            background-color: #f8f9fa;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+            transition: background-color 0.3s ease;
+        }
+        .profile-list li:hover {
+            background-color: #e6f7f1;
+        }
+        .profile-list li strong {
+            color: #20c997;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 0.75rem 1.5rem;
+            background-color: #20c997;
+            color: #ffffff;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 4px 12px rgba(32,201,151,0.5);
+        }
+        .back-link:hover {
+            background-color: #17a589;
+            color: #fff;
+            box-shadow: 0 6px 16px rgba(23,165,137,0.7);
+        }
+        .password-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 1.5rem;
+        }
+        .password-container input {
+            border: none;
+            background: none;
+            font-size: 1.2rem;
+            font-family: inherit;
+            color: #333;
+            pointer-events: none;
+            user-select: none;
+        }
+        .password-toggle-btn {
+            background-color: #20c997;
+            border: none;
+            color: #0d1722;
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+        .password-toggle-btn:hover {
+            background-color: #17a589;
+            color: #fff;
+        }
+    </style>
+</head>
+{% include 'sidebar.html' %}
+<body>
+      {% include 'nav.html' %}
+      <main class="dashboard-container">
+        <h1>Dashboard</h1>
+    {% include 'messages_block.html' %}
+        <h2>User Profile Details</h2>
+        <form method="post">
+          {% csrf_token %}
+          <div class="form-group">
+            <label>Username:</label>
+            <input type="text" class="form-control" value="{{ username }}" readonly />
+          </div>
+          <div class="form-group">
+            {{ user_form.email.label_tag }}
+            {{ user_form.email }}
+            {% if user_form.email.errors %}
+              <div class="text-danger">{{ user_form.email.errors }}</div>
+            {% endif %}
+          </div>
+          <div class="form-group">
+            {{ register_form.contact_no.label_tag }}
+            {{ register_form.contact_no }}
+            {% if register_form.contact_no.errors %}
+              <div class="text-danger">{{ register_form.contact_no.errors }}</div>
+            {% endif %}
+          </div>
+          <button type="submit" class="btn btn-green">Update Profile</button>
+        </form>
+        <a href="{% url 'change_password' %}" class="back-link" style="margin-right:10px;">Change Password</a>
+        <a href="{% url 'home' %}" class="back-link">Back to Home</a>
+      </main>
+      <!-- Footer -->
+      {% include 'footer.html' %}
+    
+<script>
+  const togglePassword = document.getElementById('togglePassword');
+  const passwordField = document.getElementById('passwordField');
+  togglePassword.addEventListener('click', function () {
+    if (passwordField.type === 'password') {
+      passwordField.type = 'text';
+      togglePassword.textContent = 'Hide';
+    } else {
+      passwordField.type = 'password';
+      togglePassword.textContent = 'Show';
+    }
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+{% load static %} 
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ramos Football Club</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+{% include 'sidebar.html' %}
+<body>
+  {% include 'nav.html' %}
+
+  <main class="about-container">
+    <section class="intro">
+      <h1>Our Journey</h1>
+      <p>
+        Founded by football enthusiast Mukul with Co-Founder Varun our club began its journey as <strong>21-FC</strong>. United by a shared passion for the beautiful game, we aimed to cultivate a community where talent and teamwork thrive.
+      </p>
+      <p>
+        As our aspirations grew, so did our identity. Drawing inspiration from the legendary Spanish center-back, Sergio Ramos—renowned for his leadership, resilience, and dedication—we rebranded ourselves as <strong>Ramos Football Club</strong>. This transformation symbolizes our commitment to embodying the qualities that make champions.
+      </p>
+    </section>
+
+    <section class="vision">
+      <h2>Our Vision</h2>
+      <p>
+        At Ramos FC, we envision a nurturing environment where players develop not only their skills but also their character. Our focus is on:
+      </p>
+      <ul>
+        <li>Fostering teamwork and unity on and off the field.</li>
+        <li>Encouraging discipline, perseverance, and sportsmanship.</li>
+        <li>Providing structured training programs to hone individual talents.</li>
+        <li>Building a community that supports and celebrates collective growth.</li>
+      </ul>
+    </section>
+
+    <section class="team-values">
+      <h2>What Sets Us Apart</h2>
+      <p>
+        Our club stands out through:
+      </p>
+      <ul>
+        <li>A player-centric approach that prioritizes personal and athletic development.</li>
+        <li>An inclusive culture welcoming individuals from diverse backgrounds.</li>
+        <li>A commitment to continuous improvement and embracing challenges.</li>
+        <li>Leadership that mentors and motivates, mirroring the ethos of our namesake.</li>
+      </ul>
+    </section>
+
+    <section class="call-to-action">
+      <h2>Join Our Legacy</h2>
+      <p>
+        Whether you're an aspiring player, a dedicated coach, or a passionate supporter, Ramos Football Club invites you to be part of our evolving story. Together, we aim to make a lasting impact on the world of football.
+      </p>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  {% include 'footer.html' %}
+</body>
+</html>

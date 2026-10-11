@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}Matches | Ramos Football Club{% endblock %}
+{% block content %}
+<h1>Matches</h1>
+
+<h2 class="rfc-h2">Upcoming fixtures</h2>
+{% for m in upcoming %}
+  <div class="rfc-card match-row">
+    <div class="match-date">{{ m.date|date:"D, j M Y" }}<br><span class="rfc-muted">{{ m.date|date:"g:i A" }}</span></div>
+    <div class="match-teams"><strong>RFC</strong> vs <strong>{{ m.opponent }}</strong>
+      <div class="rfc-muted">{{ m.competition }}{% if m.competition and m.venue %} &middot; {% endif %}{{ m.venue }} ({% if m.is_home %}Home{% else %}Away{% endif %})</div>
+    </div>
+  </div>
+{% empty %}
+  <p class="rfc-muted">No upcoming fixtures right now &mdash; follow our <a href="{% url 'news' %}">news</a> for updates.</p>
+{% endfor %}
+
+<h2 class="rfc-h2">Recent results</h2>
+{% for m in results %}
+  <div class="rfc-card match-row">
+    <div class="match-date">{{ m.date|date:"j M Y" }}</div>
+    <div class="match-teams"><strong>RFC</strong> vs <strong>{{ m.opponent }}</strong>
+      <div class="rfc-muted">{{ m.competition }}{% if m.competition and m.venue %} &middot; {% endif %}{{ m.venue }}</div>
+    </div>
+    <div class="match-score">
+      {% if m.is_played %}
+        {{ m.our_score }} &ndash; {{ m.opponent_score }}
+        <span class="rfc-badge res-{{ m.result }}">{{ m.result }}</span>
+      {% else %}<span class="rfc-muted">Score TBA</span>{% endif %}
+    </div>
+  </div>
+{% empty %}
+  <p class="rfc-muted">No results yet.</p>
+{% endfor %}
+{% endblock %}

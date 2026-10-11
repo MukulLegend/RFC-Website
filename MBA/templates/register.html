@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Football Academy – Register</title>
+  <!-- Bootstrap CSS -->
+  <link 
+    rel="stylesheet" 
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+  >
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css">
+</head>
+{% include 'sidebar.html' %}
+<body>
+  {% include 'nav.html' %}
+
+  <main class="about-container">
+    <h1>Register</h1>
+  <form method="POST" novalidate style="max-width: 400px;">
+      {% csrf_token %}
+      <div class="form-group">
+          <label for="{{ form.username.id_for_label }}">{{ form.username.label }}</label>
+          {{ form.username }}
+          {% if form.username.errors %}
+            <div class="text-danger small">{{ form.username.errors }}</div>
+          {% endif %}
+      </div>
+      <div class="form-group">
+          <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+          {{ form.email }}
+          {% if form.email.errors %}
+            <div class="text-danger small">{{ form.email.errors }}</div>
+          {% endif %}
+      </div>
+      <div class="form-group">
+          <label for="{{ form.password1.id_for_label }}">{{ form.password1.label }}</label>
+          {{ form.password1 }}
+          {% if form.password1.errors %}
+            <div class="text-danger small">{{ form.password1.errors }}</div>
+          {% endif %}
+      </div>
+      <div class="form-group">
+          <label for="{{ form.password2.id_for_label }}">{{ form.password2.label }}</label>
+          {{ form.password2 }}
+          {% if form.password2.errors %}
+            <div class="text-danger small">{{ form.password2.errors }}</div>
+          {% endif %}
+      </div>
+      <div class="form-group">
+          <label for="{{ form.contact_no.id_for_label }}">Contact Number</label>
+          {{ form.contact_no }}
+          {% if form.contact_no.errors %}
+            <div class="text-danger small">{{ form.contact_no.errors }}</div>
+          {% endif %}
+      </div>
+      <button type="submit" style="background-color: #20c997; color: #ffffff; border: none; padding: 0.75rem 1.5rem; font-size: 1rem; border-radius: 4px; cursor: pointer; transition: background-color 0.3s;">Register</button>
+    </form>
+  </main>
+  <!-- Footer -->
+  {% include 'footer.html' %}
+
+</body>
+</html>

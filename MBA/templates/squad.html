@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Squad | Ramos Football Club{% endblock %}
+{% block content %}
+<h1>Our Squad</h1>
+{% if not has_players %}
+  <p class="rfc-muted">The squad list is coming soon. Check back shortly!</p>
+{% endif %}
+{% for label, players in groups %}
+  <h2 class="rfc-h2">{{ label }}</h2>
+  <div class="rfc-grid">
+    {% for p in players %}
+    <div class="rfc-card player-card">
+      <div class="avatar">{{ p.initials }}</div>
+      <div class="player-name">{{ p.name }}{% if p.is_captain %} <span class="rfc-badge gold">C</span>{% endif %}</div>
+      <div class="rfc-muted">{{ p.get_position_display }}{% if p.jersey_number %} &middot; #{{ p.jersey_number }}{% endif %}</div>
+      {% if p.bio %}<p class="player-bio">{{ p.bio }}</p>{% endif %}
+    </div>
+    {% endfor %}
+  </div>
+{% endfor %}
+{% endblock %}

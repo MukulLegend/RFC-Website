@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}News | Ramos Football Club{% endblock %}
+{% block content %}
+<h1>Club News</h1>
+{% for item in items %}
+  <article class="rfc-card news-card">
+    <h3>{{ item.title }}</h3>
+    <div class="rfc-muted">{{ item.created_at|date:"j F Y" }}</div>
+    <p>{{ item.body|linebreaksbr }}</p>
+  </article>
+{% empty %}
+  <p class="rfc-muted">No announcements yet. Check back soon!</p>
+{% endfor %}
+{% endblock %}

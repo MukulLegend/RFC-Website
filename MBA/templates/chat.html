@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AI Chat</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding-left: 220px; /* leave space for sidebar */
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        #chat-container {
+            width: 700px;
+            margin: 40px auto;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            height: 80vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+        
+        }
+        #messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            border: 1px solid #ced4da;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            background: #fefefe;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .message {
+            margin-bottom: 15px;
+            padding: 12px 18px;
+            border-radius: 25px;
+            max-width: 75%;
+            clear: both;
+            font-size: 1rem;
+            line-height: 1.4;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        .user-message {
+            background-color: #20c997;
+            color: white;
+            float: right;
+            text-align: right;
+            border-bottom-right-radius: 0;
+        }
+        .ai-message {
+            background-color: #e9ecef;
+            color: #333;
+            float: left;
+            text-align: left;
+            border-bottom-left-radius: 0;
+        }
+        #input-area {
+            display: flex;
+            gap: 10px;
+        }
+        #user-input {
+            flex-grow: 1;
+            padding: 12px 18px;
+            font-size: 1rem;
+            border-radius: 25px;
+            border: 1px solid #ced4da;
+            outline: none;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+            transition: border-color 0.3s ease;
+        }
+        #user-input:focus {
+            border-color: #20c997;
+            box-shadow: 0 0 8px rgba(32,201,151,0.5);
+        }
+        #send-btn {
+            background-color: #20c997;
+            border: none;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 4px 8px rgba(32,201,151,0.4);
+        }
+        /* #send-btn:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+            box-shadow: none;
+        } */
+        #send-btn:hover:not(:disabled) {
+            background-color: #17a589;
+            box-shadow: 0 6px 12px rgba(23,165,137,0.6);
+        }
+        #chat-container:hover {
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            transform: scale(1.02);
+            transition: all 0.3s ease-in-out;
+        }
+    </style>
+</head>
+{% include 'sidebar.html' %}
+<body>
+    {% include 'nav.html' %}
+    <div id="chat-container" style="max-width: 900px; padding-left: 20px;">
+        <h2>RFC Assistant</h2>
+        <p style="color:#6c757d;margin:0 0 10px;">Ask about football, training or the club.</p>
+        <div id="messages"></div>
+        <div id="input-area">
+            <input type="text" id="user-input" placeholder="Type your message here..." autocomplete="off" />
+            <button id="send-btn" disabled>Send</button>
+        </div>
+    </div>
+
+    <script>
+        const userInput = document.getElementById('user-input');
+        const sendBtn = document.getElementById('send-btn');
+        const messages = document.getElementById('messages');
+
+        userInput.addEventListener('input', () => {
+            sendBtn.disabled = userInput.value.trim() === '';
+        });
+
+        sendBtn.addEventListener('click', () => {
+            const message = userInput.value.trim();
+            if (!message) return;
+
+            appendMessage(message, 'user-message');
+            userInput.value = '';
+            sendBtn.disabled = true;
+
+            fetch("{% url 'chat_api' %}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken'),
+                },
+                body: JSON.stringify({ message }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.reply) {
+                    appendMessage(data.reply, 'ai-message');
+                } else if (data.error) {
+                    appendMessage('Error: ' + data.error, 'ai-message');
+                } else {
+                    appendMessage('Error: No reply from AI.', 'ai-message');
+                }
+            })
+            .catch(() => {
+                appendMessage('Error: Failed to fetch AI response.', 'ai-message');
+            });
+        });
+
+        function appendMessage(text, className) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'message ' + className;
+            msgDiv.textContent = text;
+            messages.appendChild(msgDiv);
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    </script>
+</body>
+</html>
